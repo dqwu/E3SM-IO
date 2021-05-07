@@ -334,12 +334,14 @@ if (run_f_case) {
 
                 MPI_Barrier(io_comm);
 
+#if 0
                 /* Output 2nd kind history variables. */
                 nvars = 51;
                 outfname = "f_case_h1_varn.nc";
                 nerrs += run_varn_F_case(io_comm, out_dir, outfname, nvars, num_recs,
                                         noncontig_buf, info, dims,
                                         contig_nreqs, disps, blocklens, dbl_buf_h1, rec_buf_h1, txt_buf[1], int_buf[1]);
+#endif
             }
         }
         for (i=0; i<3; i++) {
