@@ -1,8 +1,7 @@
-
-MPICC		= mpicc
+MPICC		= cc
 CFLAGS		= -O2
 
-PnetCDF_DIR	= $(HOME)/PnetCDF
+PnetCDF_DIR	= /opt/cray/pe/parallel-netcdf/1.12.0.1/INTEL/19.1
 
 INCLUDES	= -I$(PnetCDF_DIR)/include -I.
 LDFLAGS		= -L$(PnetCDF_DIR)/lib
@@ -33,12 +32,16 @@ e3sm_io: e3sm_io.o $(OBJS)
 # ROMIO_PATCH	= -Wl,--wrap=ADIOI_Type_create_hindexed_x -l:libmpich_intel.a
 # ROMIO_PATCH	= -Wl,--wrap=ADIOI_Type_create_hindexed_x -l:libmpi.a
 ROMIO_PATCH	= -Wl,--wrap=ADIOI_Type_create_hindexed_x
+ROMIO_LIB       = /global/homes/q/qkt561/ROMIO_TAM/KNL/lib/libromio.a
 
 e3sm_io.romio_patch: e3sm_io.o $(OBJS) romio_patch.o
 	$(MPICC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS) $(ROMIO_PATCH)
 
+e3sm_io.qiao_romio: e3sm_io.o $(OBJS)
+	$(MPICC) $(CFLAGS) -o $@ $^ $(LDFLAGS) $(LIBS) $(ROMIO_LIB)
+
 clean:
-	rm -f core.* *.o dat2nc e3sm_io e3sm_io.romio_patch
+	rm -f core.* *.o dat2nc e3sm_io e3sm_io.romio_patch e3sm_io.qiao_romio
 	rm -f f_case_h0_varn.nc f_case_h1_varn.nc
 	rm -f f_case_h0_vard.nc f_case_h1_vard.nc
 	rm -f g_case_hist_varn.nc
